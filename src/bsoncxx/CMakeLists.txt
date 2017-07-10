@@ -90,8 +90,8 @@ set(bsoncxx_sources
 
 include_directories(
     ${LIBBSON_INCLUDE_DIRS}
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_BINARY_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_BINARY_DIR}/..
 )
 
 link_directories(${LIBBSON_LIBRARY_DIRS})
@@ -205,4 +205,4 @@ install(
   DESTINATION lib/cmake/libbsoncxx-${BSONCXX_VERSION}
 )
 
-add_subdirectory(test)
+#add_subdirectory(test)

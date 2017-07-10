@@ -13,7 +13,9 @@
 # limitations under the License.
 
 include_directories(
-    ${CMAKE_INSTALL_PREFIX}/${BSONCXX_HEADER_INSTALL_DIR}
+  ${MONGO_CXX_DRIVER_SOURCE_DIR}/src
+  ${MONGO_CXX_DRIVER_BINARY_DIR}/src
+  ${CMAKE_INSTALL_PREFIX}/${BSONCXX_HEADER_INSTALL_DIR}
 )
 
 link_directories(

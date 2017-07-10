@@ -97,8 +97,8 @@ set(mongocxx_sources
 include_directories(
     ${LIBBSON_INCLUDE_DIRS}
     ${LIBMONGOC_INCLUDE_DIRS}
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_BINARY_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_BINARY_DIR}/..
 )
 
 link_directories(
@@ -216,4 +216,5 @@ install(
   DESTINATION lib/cmake/libmongocxx-${MONGOCXX_VERSION}
 )
 
-add_subdirectory(test)
+
+# feelpp: add_subdirectory(test)
