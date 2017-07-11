@@ -34,7 +34,7 @@ option(MONGOCXX_ENABLE_SSL "Enable SSL - if the underlying C driver offers it" O
 
 set(MONGOCXX_VERSION ${MONGOCXX_VERSION_MAJOR}.${MONGOCXX_VERSION_MINOR}.${MONGOCXX_VERSION_PATCH}${MONGOCXX_VERSION_EXTRA})
 set(MONGOCXX_INLINE_NAMESPACE "v${MONGOCXX_ABI_VERSION}")
-set(MONGOCXX_HEADER_INSTALL_DIR "include/mongocxx/${MONGOCXX_INLINE_NAMESPACE}" CACHE INTERNAL "")
+set(MONGOCXX_HEADER_INSTALL_DIR "include/feelpp/mongocxx" CACHE INTERNAL "")
 
 add_subdirectory(config)
 
@@ -106,45 +106,45 @@ link_directories(
   ${LIBMONGOC_LIBRARY_DIRS}
 )
 
-add_library(mongocxx_static STATIC
+add_library(feelpp_mongocxx_static STATIC
     ${mongocxx_sources}
 )
 
-target_compile_definitions(mongocxx_static PUBLIC MONGOCXX_STATIC)
+target_compile_definitions(feelpp_mongocxx_static PUBLIC MONGOCXX_STATIC)
 
-set_target_properties(mongocxx_static PROPERTIES
-    OUTPUT_NAME mongocxx
+set_target_properties(feelpp_mongocxx_static PROPERTIES
+    OUTPUT_NAME feelpp_mongocxx
 )
 
 # Follow the boost convention to disambiguate the dll and static
 # library names
 if (WIN32)
-    set_target_properties(mongocxx_static PROPERTIES
+    set_target_properties(feelpp_mongocxx_static PROPERTIES
         PREFIX lib
     )
 endif()
 
-add_library(mongocxx_mocked STATIC
+add_library(feelpp_mongocxx_mocked STATIC
     ${mongocxx_sources}
 )
 
-target_compile_definitions(mongocxx_mocked PUBLIC MONGOCXX_STATIC MONGOCXX_TESTING)
+target_compile_definitions(feelpp_mongocxx_mocked PUBLIC MONGOCXX_STATIC MONGOCXX_TESTING)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(mongocxx_mocked PRIVATE /bigobj)
+    target_compile_options(feelpp_mongocxx_mocked PRIVATE /bigobj)
 endif()
 
-set_target_properties(mongocxx_mocked PROPERTIES
-    OUTPUT_NAME mongocxx_mocked
+set_target_properties(feelpp_mongocxx_mocked PROPERTIES
+    OUTPUT_NAME feelpp_mongocxx_mocked
     VERSION ${MONGOCXX_VERSION}
 )
 
-add_library(mongocxx SHARED
+add_library(feelpp_mongocxx SHARED
     ${mongocxx_sources}
 )
 
-set_target_properties (mongocxx PROPERTIES
-    OUTPUT_NAME mongocxx
+set_target_properties (feelpp_mongocxx PROPERTIES
+    OUTPUT_NAME feelpp_mongocxx
     VERSION ${MONGOCXX_VERSION}
     DEFINE_SYMBOL MONGOCXX_EXPORTS
     CXX_VISIBILITY_PRESET hidden
@@ -152,7 +152,7 @@ set_target_properties (mongocxx PROPERTIES
     SOVERSION ${MONGOCXX_ABI_VERSION}
 )
 
-generate_export_header (mongocxx
+generate_export_header (feelpp_mongocxx
     BASE_NAME MONGOCXX
     EXPORT_MACRO_NAME MONGOCXX_API
     NO_EXPORT_MACRO_NAME MONGOCXX_PRIVATE
@@ -162,9 +162,9 @@ generate_export_header (mongocxx
 
 set(mongocxx_libs ${LIBMONGOC_LIBRARIES} ${LIBBSON_LIBRARIES})
 
-target_link_libraries(mongocxx_static bsoncxx_static ${mongocxx_libs})
-target_link_libraries(mongocxx_mocked bsoncxx_static ${mongocxx_libs})
-target_link_libraries(mongocxx PUBLIC bsoncxx PRIVATE ${mongocxx_libs})
+target_link_libraries(feelpp_mongocxx_static feelpp_bsoncxx_static ${mongocxx_libs})
+target_link_libraries(feelpp_mongocxx_mocked feelpp_bsoncxx_static ${mongocxx_libs})
+target_link_libraries(feelpp_mongocxx PUBLIC feelpp_bsoncxx PRIVATE ${mongocxx_libs})
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DESTINATION ${MONGOCXX_HEADER_INSTALL_DIR}
@@ -181,7 +181,7 @@ install(FILES
 
 if (BUILD_SHARED_LIBS)
     install(TARGETS
-        mongocxx
+        feelpp_mongocxx
         RUNTIME DESTINATION bin COMPONENT runtime
         LIBRARY DESTINATION lib COMPONENT runtime
         ARCHIVE DESTINATION lib COMPONENT dev
@@ -189,31 +189,31 @@ if (BUILD_SHARED_LIBS)
 endif()
 
 install(TARGETS
-    mongocxx_static
+    feelpp_mongocxx_static
     ARCHIVE DESTINATION lib COMPONENT dev
 )
 
 set(PACKAGE_INCLUDE_INSTALL_DIRS ${MONGOCXX_HEADER_INSTALL_DIR})
 set(PACKAGE_LIBRARY_INSTALL_DIRS lib)
-set(PACKAGE_LIBRARIES mongocxx)
+set(PACKAGE_LIBRARIES feelpp_mongocxx)
 
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-  cmake/libmongocxx-config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libmongocxx-config.cmake
-  INSTALL_DESTINATION lib/cmake/libmongocxx-${MONGOCXX_VERSION}
+  cmake/libmongocxx-config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libfeelpp_mongocxx-config.cmake
+  INSTALL_DESTINATION share/feelpp/feel/cmake/modules/
   PATH_VARS PACKAGE_INCLUDE_INSTALL_DIRS PACKAGE_LIBRARY_INSTALL_DIRS
 )
 
 write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/libmongocxx-config-version.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/libfeelpp_mongocxx-config-version.cmake
   VERSION ${MONGOCXX_VERSION}
   COMPATIBILITY SameMajorVersion
 )
 
 install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/libmongocxx-config.cmake ${CMAKE_CURRENT_BINARY_DIR}/libmongocxx-config-version.cmake
-  DESTINATION lib/cmake/libmongocxx-${MONGOCXX_VERSION}
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/libfeelpp_mongocxx-config.cmake ${CMAKE_CURRENT_BINARY_DIR}/libfeelpp_mongocxx-config-version.cmake
+  DESTINATION share/feelpp/feel/cmake/modules/
 )
 
 

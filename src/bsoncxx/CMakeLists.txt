@@ -60,7 +60,8 @@ endif()
 
 set(BSONCXX_VERSION ${BSONCXX_VERSION_MAJOR}.${BSONCXX_VERSION_MINOR}.${BSONCXX_VERSION_PATCH}${BSONCXX_VERSION_EXTRA})
 set(BSONCXX_INLINE_NAMESPACE "v${BSONCXX_ABI_VERSION}")
-set(BSONCXX_HEADER_INSTALL_DIR "include/bsoncxx/${BSONCXX_INLINE_NAMESPACE}" CACHE INTERNAL "")
+#set(BSONCXX_HEADER_INSTALL_DIR "include/bsoncxx/${BSONCXX_INLINE_NAMESPACE}" CACHE INTERNAL "")
+set(BSONCXX_HEADER_INSTALL_DIR "include/feelpp/bsoncxx" CACHE INTERNAL "")
 
 set(LIBBSON_REQUIRED_VERSION 1.5.0)
 set(LIBBSON_REQUIRED_ABI_VERSION 1.0)
@@ -100,32 +101,32 @@ if (BSONCXX_POLY_USE_BOOST)
     find_package(Boost 1.56.0 REQUIRED)
 endif()
 
-add_library(bsoncxx_static STATIC
+add_library(feelpp_bsoncxx_static STATIC
     ${bsoncxx_sources}
 )
 
-target_compile_definitions(bsoncxx_static PUBLIC BSONCXX_STATIC)
+target_compile_definitions(feelpp_bsoncxx_static PUBLIC BSONCXX_STATIC)
 
-set_target_properties(bsoncxx_static PROPERTIES
-    OUTPUT_NAME bsoncxx
+set_target_properties(feelpp_bsoncxx_static PROPERTIES
+    OUTPUT_NAME feelpp_bsoncxx
 )
 
 # Follow the boost convention to disambiguate the dll and static
 # library names
 if (WIN32)
-    set_target_properties(bsoncxx_static PROPERTIES
+    set_target_properties(feelpp_bsoncxx_static PROPERTIES
         PREFIX lib
     )
 endif()
 
-add_library(bsoncxx SHARED
+add_library(feelpp_bsoncxx SHARED
     ${bsoncxx_sources}
 )
 
 set(bsoncxx_libs ${LIBBSON_LIBRARIES})
 
-set_target_properties(bsoncxx PROPERTIES
-    OUTPUT_NAME bsoncxx
+set_target_properties(feelpp_bsoncxx PROPERTIES
+    OUTPUT_NAME feelpp_bsoncxx
     VERSION ${BSONCXX_VERSION}
     DEFINE_SYMBOL BSONCXX_EXPORT
     CXX_VISIBILITY_PRESET hidden
@@ -133,7 +134,7 @@ set_target_properties(bsoncxx PROPERTIES
     SOVERSION ${BSONCXX_ABI_VERSION}
 )
 
-generate_export_header(bsoncxx
+generate_export_header(feelpp_bsoncxx
     BASE_NAME BSONCXX
     EXPORT_MACRO_NAME BSONCXX_API
     NO_EXPORT_MACRO_NAME BSONCXX_PRIVATE
@@ -142,18 +143,18 @@ generate_export_header(bsoncxx
 )
 
 if (BSONCXX_POLY_USE_MNMLSTC AND NOT BSONCXX_POLY_USE_SYSTEM_MNMLSTC)
-    add_dependencies(bsoncxx_static EP_mnmlstc_core)
-    add_dependencies(bsoncxx EP_mnmlstc_core)
+    add_dependencies(feelpp_bsoncxx_static EP_mnmlstc_core)
+    add_dependencies(feelpp_bsoncxx EP_mnmlstc_core)
     ExternalProject_Get_Property(EP_mnmlstc_core source_dir)
-    target_include_directories(bsoncxx_static PUBLIC ${source_dir}/include)
-    target_include_directories(bsoncxx PUBLIC ${source_dir}/include)
+    target_include_directories(feelpp_bsoncxx_static PUBLIC ${source_dir}/include)
+    target_include_directories(feelpp_bsoncxx PUBLIC ${source_dir}/include)
 elseif (BSONCXX_POLY_USE_BOOST)
-    target_include_directories(bsoncxx_static PUBLIC ${Boost_INCLUDE_DIRS})
-    target_include_directories(bsoncxx PUBLIC ${Boost_INCLUDE_DIRS})
+    target_include_directories(feelpp_bsoncxx_static PUBLIC ${Boost_INCLUDE_DIRS})
+    target_include_directories(feelpp_bsoncxx PUBLIC ${Boost_INCLUDE_DIRS})
 endif()
 
-target_link_libraries(bsoncxx_static ${bsoncxx_libs})
-target_link_libraries(bsoncxx PRIVATE ${bsoncxx_libs})
+target_link_libraries(feelpp_bsoncxx_static ${bsoncxx_libs})
+target_link_libraries(feelpp_bsoncxx PRIVATE ${bsoncxx_libs})
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DESTINATION ${BSONCXX_HEADER_INSTALL_DIR}
@@ -170,7 +171,7 @@ install(FILES
 
 if (BUILD_SHARED_LIBS)
     install(TARGETS
-        bsoncxx
+        feelpp_bsoncxx
         RUNTIME DESTINATION bin COMPONENT runtime
         LIBRARY DESTINATION lib COMPONENT runtime
         ARCHIVE DESTINATION lib COMPONENT dev
@@ -178,31 +179,31 @@ if (BUILD_SHARED_LIBS)
 endif()
 
 install(TARGETS
-    bsoncxx_static
+    feelpp_bsoncxx_static
     ARCHIVE DESTINATION lib COMPONENT dev
 )
 
 set(PACKAGE_INCLUDE_INSTALL_DIRS ${BSONCXX_HEADER_INSTALL_DIR})
 set(PACKAGE_LIBRARY_INSTALL_DIRS lib)
-set(PACKAGE_LIBRARIES bsoncxx)
+set(PACKAGE_LIBRARIES feelpp_bsoncxx)
 
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-  cmake/libbsoncxx-config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libbsoncxx-config.cmake
-  INSTALL_DESTINATION lib/cmake/libbsoncxx-${BSONCXX_VERSION}
+  cmake/libbsoncxx-config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libfeelpp_bsoncxx-config.cmake
+  INSTALL_DESTINATION share/feelpp/feel/cmake/modules/
   PATH_VARS PACKAGE_INCLUDE_INSTALL_DIRS PACKAGE_LIBRARY_INSTALL_DIRS
 )
 
 write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/libbsoncxx-config-version.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/libfeelpp_bsoncxx-config-version.cmake
   VERSION ${BSONCXX_VERSION}
   COMPATIBILITY SameMajorVersion
 )
 
 install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/libbsoncxx-config.cmake ${CMAKE_CURRENT_BINARY_DIR}/libbsoncxx-config-version.cmake
-  DESTINATION lib/cmake/libbsoncxx-${BSONCXX_VERSION}
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/libfeelpp_bsoncxx-config.cmake ${CMAKE_CURRENT_BINARY_DIR}/libfeelpp_bsoncxx-config-version.cmake
+  DESTINATION share/feelpp/feel/cmake/modules/
 )
 
 #add_subdirectory(test)

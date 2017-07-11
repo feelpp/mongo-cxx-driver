@@ -49,7 +49,6 @@ set(CMAKE_MACOSX_RPATH 1)
 # Add in our modules, we write FindX modules for libbson and libmongoc
 # since they don't currently install them.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
-message(STATUS "modulepath: ${CMAKE_MODULE_PATH}")
 
 # Enforce the C++ standard, and disable extensions
 if(NOT DEFINED CMAKE_CXX_STANDARD)
