@@ -30,7 +30,7 @@ if(LIBBSON_DIR)
   find_package_handle_standard_args(LIBBSON DEFAULT_MSG LIBBSON_LIBRARIES LIBBSON_LIBRARY_DIRS LIBBSON_INCLUDE_DIRS)
 elseif (PKG_CONFIG_FOUND)
   # The best we can do until libbson starts installing a libbson-config.cmake file
-  pkg_check_modules(LIBBSON REQUIRED libbson-1.0>=${LibBSON_FIND_VERSION} )
+  pkg_check_modules(LIBBSON  libbson-1.0>=${LibBSON_FIND_VERSION} )
   # We don't reiterate the version information here because we assume that
   # pkg_check_modules has honored our request.
   find_package_handle_standard_args(LIBBSON DEFAULT_MSG LIBBSON_FOUND)

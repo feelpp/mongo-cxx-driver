@@ -30,7 +30,7 @@ if(LIBMONGOC_DIR)
   find_package_handle_standard_args(LIBMONGOC DEFAULT_MSG LIBMONGOC_LIBRARIES LIBMONGOC_LIBRARY_DIRS LIBMONGOC_INCLUDE_DIRS)
 elseif (PKG_CONFIG_FOUND)
   # The best we can do until libMONGOC starts installing a libmongoc-config.cmake file
-  pkg_check_modules(LIBMONGOC REQUIRED libmongoc-1.0>=${LibMongoC_FIND_VERSION} )
+  pkg_check_modules(LIBMONGOC libmongoc-1.0>=${LibMongoC_FIND_VERSION} )
   # We don't reiterate the version information here because we assume that
   # pkg_check_modules has honored our request.
   find_package_handle_standard_args(LIBMONGOC DEFAULT_MSG LIBMONGOC_FOUND)
