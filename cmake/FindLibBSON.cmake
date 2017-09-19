@@ -15,6 +15,10 @@
 # Find libbson, either via pkg-config, find-package in config mode,
 # or other less admirable jiggery-pokery
 
+if ( LIBBSON_FOUND )
+  return()
+endif()
+
 SET(LIBBSON_DIR "" CACHE STRING "Manual search path for libbson")
 
 include(FindPackageHandleStandardArgs)

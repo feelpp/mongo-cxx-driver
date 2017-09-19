@@ -15,6 +15,10 @@
 # Find libmongo-c, either via pkg-config, find-package in config mode,
 # or other less admirable jiggery-pokery
 
+if ( LIBMONGOC_FOUND )
+  return()
+endif()
+
 SET(LIBMONGOC_DIR "" CACHE STRING "Manual search path for libmongoc")
 
 include(FindPackageHandleStandardArgs)
@@ -34,7 +38,11 @@ elseif (PKG_CONFIG_FOUND)
   # We don't reiterate the version information here because we assume that
   # pkg_check_modules has honored our request.
   find_package_handle_standard_args(LIBMONGOC DEFAULT_MSG LIBMONGOC_FOUND)
+else()
+    message(FATAL_ERROR "Don't know how to find libmongoc; please set LIBMONGOC_DIR to the prefix directory with which libbson was configured.")
+endif()
 
+if ( LIBMONGOC_FOUND )
   set(LIBMONGOC_LIBRARIES_FULLPATH)
   foreach( mylib ${LIBMONGOC_LIBRARIES} )
     find_library (CURRENT_LIBMONGOC ${mylib} HINTS ${LIBMONGOC_LIBRARY_DIRS} )
@@ -54,6 +62,4 @@ elseif (PKG_CONFIG_FOUND)
       # publish updated value back to the cache
       set(LIBMONGOC_LIBRARIES ${LIBMONGOC_LIBRARIES} CACHE INTERNAL "")
   endif()
-else()
-    message(FATAL_ERROR "Don't know how to find libmongoc; please set LIBMONGOC_DIR to the prefix directory with which libbson was configured.")
 endif()
