@@ -34,6 +34,15 @@ elseif (PKG_CONFIG_FOUND)
   # We don't reiterate the version information here because we assume that
   # pkg_check_modules has honored our request.
   find_package_handle_standard_args(LIBMONGOC DEFAULT_MSG LIBMONGOC_FOUND)
+
+  set(LIBMONGOC_LIBRARIES_FULLPATH)
+  foreach( mylib ${LIBMONGOC_LIBRARIES} )
+    find_library (CURRENT_LIBMONGOC ${mylib} HINTS ${LIBMONGOC_LIBRARY_DIRS} )
+    list(APPEND LIBMONGOC_LIBRARIES_FULLPATH ${CURRENT_LIBMONGOC})
+    unset(CURRENT_LIBMONGOC CACHE)
+  endforeach()
+  set(LIBMONGOC_LIBRARIES ${LIBMONGOC_LIBRARIES_FULLPATH} CACHE INTERNAL "")
+
   if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND LIBMONGOC_LDFLAGS_OTHER)
       # pkg_check_modules strips framework libraries and puts them in the
       # LIBMONGOC_LDFLAGS_OTHER variable.  We need to append them
