@@ -172,6 +172,7 @@ install(FILES
 if (BUILD_SHARED_LIBS)
     install(TARGETS
         feelpp_bsoncxx
+        EXPORT feelpp-contrib-export-targets
         RUNTIME DESTINATION bin COMPONENT runtime
         LIBRARY DESTINATION lib COMPONENT runtime
         ARCHIVE DESTINATION lib COMPONENT dev
@@ -180,6 +181,7 @@ endif()
 
 install(TARGETS
     feelpp_bsoncxx_static
+    EXPORT feelpp-contrib-export-targets
     ARCHIVE DESTINATION lib COMPONENT dev
 )
 

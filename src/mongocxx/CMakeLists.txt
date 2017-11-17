@@ -182,6 +182,7 @@ install(FILES
 if (BUILD_SHARED_LIBS)
     install(TARGETS
         feelpp_mongocxx
+        EXPORT feelpp-contrib-export-targets
         RUNTIME DESTINATION bin COMPONENT runtime
         LIBRARY DESTINATION lib COMPONENT runtime
         ARCHIVE DESTINATION lib COMPONENT dev
@@ -190,7 +191,8 @@ endif()
 
 install(TARGETS
     feelpp_mongocxx_static
-    ARCHIVE DESTINATION lib COMPONENT dev
+    EXPORT feelpp-contrib-export-targets
+    ARCHIVE DESTINATION lib COMPONENT dev    
 )
 
 set(PACKAGE_INCLUDE_INSTALL_DIRS ${MONGOCXX_HEADER_INSTALL_DIR})
