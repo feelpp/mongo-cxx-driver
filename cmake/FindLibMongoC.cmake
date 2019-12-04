@@ -19,7 +19,11 @@ if ( LIBMONGOC_FOUND )
   return()
 endif()
 
-SET(LIBMONGOC_DIR "" CACHE STRING "Manual search path for libmongoc")
+if (DEFINED ENV{LIBMONGOC_DIR})
+  SET(LIBMONGOC_DIR "$ENV{LIBMONGOC_DIR}" CACHE STRING "Manual search path for libmongoc")
+else()
+  SET(LIBMONGOC_DIR "" CACHE STRING "Manual search path for libmongoc")
+endif()
 
 include(FindPackageHandleStandardArgs)
 

@@ -19,7 +19,11 @@ if ( LIBBSON_FOUND )
   return()
 endif()
 
-SET(LIBBSON_DIR "" CACHE STRING "Manual search path for libbson")
+if ( DEFINED ENV{LIBBSON_DIR} )
+  SET(LIBBSON_DIR "$ENV{LIBBSON_DIR}" CACHE STRING "Manual search path for libbson")
+else()
+  SET(LIBBSON_DIR "" CACHE STRING "Manual search path for libbson")
+endif()
 
 include(FindPackageHandleStandardArgs)
 
